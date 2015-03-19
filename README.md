@@ -29,3 +29,8 @@ usage:
 ``` bash
 python bwi.py
 ```
+or add below to your .bashrc or (.zshrc)
+
+``` bash
+alias bwi='cd /path/to/bandwagon-info; python bwi.py; cd -;'
+```
