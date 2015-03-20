@@ -34,3 +34,6 @@ or add below to your .bashrc or (.zshrc)
 ``` bash
 alias bwi='cd /path/to/bandwagon-info; python bwi.py; cd -;'
 ```
+
+todo:
+- control vps start stop reboot and etc
