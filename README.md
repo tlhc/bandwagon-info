@@ -27,7 +27,12 @@ manage_pass = mypassword  ;your kiwivm manage password
 usage:
 
 ``` bash
-python bwi.py
+python bwi.py                                   #default for all info
+
+python bwi.py -c ./bwi.cfg -s 'node ram swap disk reset bandwidth time'
+              
+               -c path to your config file
+               -s show info switch (you can just config 'ram bandwidth' for ram and bandwidth info)
 ```
 or add below to your .bashrc or (.zshrc)
 

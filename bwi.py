@@ -7,6 +7,7 @@ import os
 import sys
 import ConfigParser
 import requests
+import getopt
 from bs4 import BeautifulSoup
 
 def readcfg(path):
@@ -68,24 +69,59 @@ def reqstatus(cfgdict):
             sys.exit('parse error and exit.')
     return infodict
 
-def showinfo(cfgdict, infodict):
+
+def showinfo(cfgdict, infodict, showlist):
     """ show info """
     print '----------------------------------------'
-    print 'Node IP: ' + cfgdict['vps_ip']
-    print 'RAM:     ' + infodict['ram']
-    print 'SWAP:    ' + infodict['swap']
-    print 'DISK:    ' + infodict['disk']
-    print 'Reset:   ' + infodict['reset']
-    print 'BW:      ' + infodict['bandwidth']
+    if 'node' in showlist:
+        print 'Node IP: ' + cfgdict['vps_ip']
+    if 'ram' in showlist:
+        print 'RAM:     ' + infodict['ram']
+    if 'swap' in showlist:
+        print 'SWAP:    ' + infodict['swap']
+    if 'disk' in showlist:
+        print 'DISK:    ' + infodict['disk']
+    if 'reset' in showlist:
+        print 'Reset:   ' + infodict['reset']
+    if 'bandwidth' in showlist:
+        print 'BW:      ' + infodict['bandwidth']
+    if 'time' in showlist:
+        from time import localtime, strftime
+        print 'TIME:    ' + strftime('%Y-%m-%d %H:%M:%S', localtime())
     print '----------------------------------------'
 
+def usage():
+    """ usage """
+    print """
+    python bwi.py         -c config file path
+                          -s show info switch
+           example:
+           python bwi.py -c ./bwi.cfg -s 'node ram swap disk reset bandwidth time'
+          """
 
 def main():
     """ main """
-    cfgdict = readcfg('./bwi.cfg')
+    optdict = {'config_path': None,
+               'show_info': None}
+    try:
+        options, _ = getopt.getopt(sys.argv[1:], 'c:s:h', ['config=', 'show=', 'help'])
+        for opt, args in options:
+            if opt == '-c' or opt == '--config':
+                optdict['config_path'] = args
+            if opt == '-s' or opt == '--show':
+                optdict['show_info'] = args
+            if opt == '-h' or opt == '--help':
+                sys.exit(usage())
+    except getopt.GetoptError as ex:
+        sys.exit(ex)
+    cfgdict = readcfg(optdict['config_path']) \
+            if optdict['config_path'] is not None \
+            else readcfg('./bwi.cfg')
+    showlist = list(optdict['show_info'].split(' ')) \
+            if optdict['show_info'] is not None and optdict['show_info'] != '' \
+            else ['node', 'ram', 'swap', 'disk', 'reset', 'bandwidth', 'time']
     infodict = reqstatus(cfgdict)
-    showinfo(cfgdict, infodict)
+    showinfo(cfgdict, infodict, showlist)
 
 if __name__ == '__main__':
     main()
-
