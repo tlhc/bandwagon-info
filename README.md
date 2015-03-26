@@ -5,6 +5,8 @@ bwi.py is a simple script for get bandwagonhost.com vps status info
 
 ![screen:](https://raw.githubusercontent.com/tlhc/bandwagon-info/master/bwg.png)
 
+![screen-all:](https://raw.githubusercontent.com/tlhc/bandwagon-info/master/bwg-all.png)
+
 
 config file:
 
