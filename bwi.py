@@ -20,6 +20,7 @@ def readcfg(path):
                 sys.exit('no cfg file')
             try:
                 cfgdict['local_use'] = parser.getint('info', 'local_use')
+                cfgdict['manage_host'] = parser.get('info', 'manage_host')
                 cfgdict['manage_pass'] = parser.get('info', 'manage_pass')
             except ConfigParser.Error as ex:
                 sys.exit(ex)
@@ -49,12 +50,12 @@ def reqstatus(cfgdict):
 
     payload['login'] = cfgdict['vps_ip']
     payload['password'] = cfgdict['manage_pass']
-    req = requests.post('https://kiwivm.it7.net/?mode=login', data=payload)
+    req = requests.post('%s?mode=login' % cfgdict['manage_host'], data=payload)
     # only 200 is success not other code (run once)
     if req.status_code != 200:
         sys.exit('req not success')
     else:
-        req = requests.get('https://kiwivm.it7.net/kiwi-main-controls.php',\
+        req = requests.get('%skiwi-main-controls.php' % cfgdict['manage_host'],\
                 cookies=req.cookies)
         soup = BeautifulSoup(req.text)
         # quick and dirty
